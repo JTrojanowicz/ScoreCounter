@@ -11,6 +11,10 @@
 		EFC9E47C2749773300199C3B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E47B2749773300199C3B /* ContentView.swift */; };
 		EFC9E47E2749773600199C3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC9E47D2749773600199C3B /* Assets.xcassets */; };
 		EFC9E4812749773600199C3B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC9E4802749773600199C3B /* Preview Assets.xcassets */; };
+		EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */; };
+		EFC9E48F27497A1800199C3B /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E48E27497A1800199C3B /* Toolbar.swift */; };
+		EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */; };
+		EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,10 @@
 		EFC9E47B2749773300199C3B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EFC9E47D2749773600199C3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EFC9E4802749773600199C3B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		EFC9E48C2749786100199C3B /* ScoreStorage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ScoreStorage.xcdatamodel; sourceTree = "<group>"; };
+		EFC9E48E27497A1800199C3B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryList.swift; sourceTree = "<group>"; };
+		EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScoreAndButtons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +60,8 @@
 			isa = PBXGroup;
 			children = (
 				EFC9E4792749773300199C3B /* ScoreCounterApp.swift */,
-				EFC9E47B2749773300199C3B /* ContentView.swift */,
+				EFC9E48A274977BF00199C3B /* Views */,
+				EFC9E488274977AB00199C3B /* Model */,
 				EFC9E47D2749773600199C3B /* Assets.xcassets */,
 				EFC9E47F2749773600199C3B /* Preview Content */,
 			);
@@ -65,6 +74,25 @@
 				EFC9E4802749773600199C3B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		EFC9E488274977AB00199C3B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EFC9E48A274977BF00199C3B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EFC9E47B2749773300199C3B /* ContentView.swift */,
+				EFC9E48E27497A1800199C3B /* Toolbar.swift */,
+				EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */,
+				EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +165,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */,
+				EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */,
+				EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */,
 				EFC9E47C2749773300199C3B /* ContentView.swift in Sources */,
 				EFC9E47A2749773300199C3B /* ScoreCounterApp.swift in Sources */,
+				EFC9E48F27497A1800199C3B /* Toolbar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +313,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -310,7 +342,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -341,6 +373,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EFC9E48C2749786100199C3B /* ScoreStorage.xcdatamodel */,
+			);
+			currentVersion = EFC9E48C2749786100199C3B /* ScoreStorage.xcdatamodel */;
+			path = ScoreStorage.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EFC9E46E2749773300199C3B /* Project object */;
 }
