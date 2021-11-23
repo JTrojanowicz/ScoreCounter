@@ -6,10 +6,24 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ScoreHistoryList: View {
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.timeStamp, order: .reverse)]) var gainedPoints: FetchedResults<OneGainedPoint>
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section(header: Text("SCORE HISTORY")) {
+                ForEach(gainedPoints, id: \.self) { oneGainedPoint in
+                    ScoreHistoryRow(oneGainedPoint: oneGainedPoint, allGainedPoints: gainedPoints.reversed())
+                }
+            }
+        }
+        .onAppear(perform: onAppear)
+    }
+    
+    private func onAppear() {
+        
     }
 }
 

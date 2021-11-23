@@ -6,38 +6,42 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct CurrentScore: View {
+    @EnvironmentObject var appInfo: AppInfo
+    
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .trailing) {
                 Text("Team A")
                     .font(.system(size: 30, weight: .heavy , design: .rounded))
-                Text("2")
-                    .font(.system(size: 90, weight: .heavy , design: .rounded))
+                Text("\(appInfo.currentScoreForTeamA)")
+                    .font(.system(size: 90, weight: .heavy , design: .monospaced))
             }
             VStack {
                 Text(" ")
                     .font(.system(size: 30, weight: .heavy , design: .rounded))
                 Text(":")
-                    .font(.system(size: 90, weight: .heavy , design: .rounded))
+                    .font(.system(size: 90, weight: .heavy , design: .monospaced))
             }
             VStack(alignment: .leading) {
                 Text("Team B")
                     .font(.system(size: 30, weight: .heavy , design: .rounded))
-                Text("1")
-                    .font(.system(size: 90, weight: .heavy , design: .rounded))
+                Text("\(appInfo.currentScoreForTeamB)")
+                    .font(.system(size: 90, weight: .heavy , design: .monospaced))
             }
         }
-//        .background(Color.yellow)
     }
 }
 
 enum ButtonSide {
-    case left, right
+    case teamA, teamB
 }
 
 struct BigButton: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
     var side: ButtonSide
     var body: some View {
         Button(action: scoreIcrement) {
@@ -47,15 +51,24 @@ struct BigButton: View {
                 .frame(width: 150, height: 150)
         }
         .padding()
-//        .background(Color.yellow)
     }
     
     private func scoreIcrement() {
-        switch(side) {
-        case .left:
-            print("teamLeftScoreIcrement")
-        case .right:
-            print("teamRightScoreIcrement")
+        managedObjectContext.performAndWait {
+            let onePoint = OneGainedPoint(context: managedObjectContext)
+            
+            onePoint.timeStamp = Date()
+            
+            switch(side) {
+            case .teamA:
+                onePoint.isIcrementingTeamA = true
+                print("isIcrementingTeamA")
+            case .teamB:
+                onePoint.isIcrementingTeamB = true
+                print("isIcrementingTeamB")
+            }
+            
+            PersistenceController.shared.save()
         }
     }
 }
@@ -70,9 +83,9 @@ struct CurrentScoreAndButtons: View {
                     Spacer()
                     HStack(spacing: 0) {
                         Spacer()
-                        BigButton(side: .left)
+                        BigButton(side: .teamA)
                         Spacer()
-                        BigButton(side: .right)
+                        BigButton(side: .teamB)
                         Spacer()
                     }
                     Spacer()
@@ -82,11 +95,11 @@ struct CurrentScoreAndButtons: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        BigButton(side: .left)
+                        BigButton(side: .teamA)
                         Spacer()
                         CurrentScore()
                         Spacer()
-                        BigButton(side: .right)
+                        BigButton(side: .teamB)
                         Spacer()
                     }
                     Spacer()
@@ -99,6 +112,6 @@ struct CurrentScoreAndButtons: View {
 struct CurrentScore_Previews: PreviewProvider {
     static var previews: some View {
         CurrentScoreAndButtons()
-.previewInterfaceOrientation(.portrait)
+            .previewInterfaceOrientation(.portrait)
     }
 }

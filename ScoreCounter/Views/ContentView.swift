@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import CoreData
+import Foundation
 
 struct ContentView: View {
-    let historyHeightRatio = 0.33
+    @EnvironmentObject var appInfo: AppInfo
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @State private var historyHeightRatio = 0.33
+    @State private var isResetDialogShown = false
+    
     var body: some View {
         NavigationView {
             GeometryReader { geo in
@@ -23,17 +30,58 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                Toolbar()
+                Toolbar() {
+                    Button(action: resetWasTapped) {
+                        Text("Reset")
+                            .actionSheet(isPresented: $isResetDialogShown) {
+                                ActionSheet(
+                                    title: Text("Reset the score"),
+                                    message: Text("Reseting will remove whole history of the scores"),
+                                    buttons: [
+                                        .destructive(Text("Confirm"), action: resetScore),
+                                        .cancel()
+                                    ])
+                            }
+                    }
+                }
             }
-            .navigationBarTitleDisplayMode(.inline)
         }
-//        .edgesIgnoringSafeArea(.all)
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear(perform: onAppear)
+    }
+    
+    private func onAppear() {
+        
+    }
+    
+    private func resetWasTapped() {
+        isResetDialogShown = true
+    }
+    
+    private func resetScore() {
+        print("Reseting score!")
+        managedObjectContext.performAndWait {
+            
+            //Perform batch delete of all the elements
+            
+            do {
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OneGainedPoint")
+                let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                // Specify the result of the NSBatchDeleteRequest: should be the NSManagedObject IDs for the deleted objects
+                batchDeleteRequest.resultType = .resultTypeObjectIDs
+                
+                let batchDelete =  try managedObjectContext.execute(batchDeleteRequest) as? NSBatchDeleteResult
+                
+                guard let ids = batchDelete?.result as? [NSManagedObjectID] else {
+                    return
+                }
+                let deletedObjects: [AnyHashable: Any] = [NSDeletedObjectsKey: ids]
+                // Merge the delete changes into the managed object context
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [managedObjectContext])
+            } catch {
+                print("ERROR: \(error)")
+            }
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-.previewInterfaceOrientation(.portrait)
-    }
-}

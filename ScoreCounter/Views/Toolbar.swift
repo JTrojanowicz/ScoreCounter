@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import CoreData
 
-struct Toolbar: ToolbarContent {
+struct Toolbar<ResetButtonView: View>: ToolbarContent {
+    
     var appVersion: String {
-      Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
+    
+    @ViewBuilder let resetButtonView: ResetButtonView
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            Text("Reset")
+            resetButtonView
         }
         
         ToolbarItem(placement: .principal) {
@@ -26,19 +30,6 @@ struct Toolbar: ToolbarContent {
                 
             }
         }
-        
-        ToolbarItemGroup {
-            HStack {
-                Text("Icon")
-            }
-        }
-        
-//        ToolbarItemGroup(placement: .bottomBar) {
-//            Text("ver. \(appVersion)")
-//                .font(.system(size: 10, weight: .medium, design:.default))
-//
-//        }
-        
     }
 }
 

@@ -15,6 +15,11 @@
 		EFC9E48F27497A1800199C3B /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E48E27497A1800199C3B /* Toolbar.swift */; };
 		EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */; };
 		EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */; };
+		EFC9E495274AC88400199C3B /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E494274AC88400199C3B /* PersistenceController.swift */; };
+		EFC9E498274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E496274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift */; };
+		EFC9E49B274AEAEE00199C3B /* ScoreHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */; };
+		EFC9E49E274AF10300199C3B /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E49D274AF10300199C3B /* Date.swift */; };
+		EFC9E4A0274AF59C00199C3B /* OneGainedPoint+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E49F274AF59C00199C3B /* OneGainedPoint+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +32,11 @@
 		EFC9E48E27497A1800199C3B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryList.swift; sourceTree = "<group>"; };
 		EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScoreAndButtons.swift; sourceTree = "<group>"; };
+		EFC9E494274AC88400199C3B /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		EFC9E496274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OneGainedPoint+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryRow.swift; sourceTree = "<group>"; };
+		EFC9E49D274AF10300199C3B /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		EFC9E49F274AF59C00199C3B /* OneGainedPoint+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OneGainedPoint+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +70,9 @@
 			isa = PBXGroup;
 			children = (
 				EFC9E4792749773300199C3B /* ScoreCounterApp.swift */,
-				EFC9E48A274977BF00199C3B /* Views */,
 				EFC9E488274977AB00199C3B /* Model */,
+				EFC9E48A274977BF00199C3B /* Views */,
+				EFC9E49C274AF0DB00199C3B /* Extensions */,
 				EFC9E47D2749773600199C3B /* Assets.xcassets */,
 				EFC9E47F2749773600199C3B /* Preview Content */,
 			);
@@ -80,6 +91,9 @@
 			isa = PBXGroup;
 			children = (
 				EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */,
+				EFC9E496274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift */,
+				EFC9E49F274AF59C00199C3B /* OneGainedPoint+CoreDataProperties.swift */,
+				EFC9E494274AC88400199C3B /* PersistenceController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -91,8 +105,17 @@
 				EFC9E48E27497A1800199C3B /* Toolbar.swift */,
 				EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */,
 				EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */,
+				EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		EFC9E49C274AF0DB00199C3B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				EFC9E49D274AF10300199C3B /* Date.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,9 +189,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */,
+				EFC9E49B274AEAEE00199C3B /* ScoreHistoryRow.swift in Sources */,
+				EFC9E498274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift in Sources */,
 				EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */,
 				EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */,
 				EFC9E47C2749773300199C3B /* ContentView.swift in Sources */,
+				EFC9E495274AC88400199C3B /* PersistenceController.swift in Sources */,
+				EFC9E49E274AF10300199C3B /* Date.swift in Sources */,
+				EFC9E4A0274AF59C00199C3B /* OneGainedPoint+CoreDataProperties.swift in Sources */,
 				EFC9E47A2749773300199C3B /* ScoreCounterApp.swift in Sources */,
 				EFC9E48F27497A1800199C3B /* Toolbar.swift in Sources */,
 			);
@@ -313,7 +341,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -342,7 +370,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
