@@ -7,16 +7,20 @@
 
 import SwiftUI
 import CoreData
+import AVFoundation
 
 struct CurrentScore: View {
-    @EnvironmentObject var appInfo: AppInfo
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @State private var currentScoreForTeamA = 0
+    @State private var currentScoreForTeamB = 0
     
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .trailing) {
                 Text("Team A")
                     .font(.system(size: 30, weight: .heavy , design: .rounded))
-                Text("\(appInfo.currentScoreForTeamA)")
+                Text("\(currentScoreForTeamA)")
                     .font(.system(size: 90, weight: .heavy , design: .monospaced))
             }
             VStack {
@@ -28,9 +32,41 @@ struct CurrentScore: View {
             VStack(alignment: .leading) {
                 Text("Team B")
                     .font(.system(size: 30, weight: .heavy , design: .rounded))
-                Text("\(appInfo.currentScoreForTeamB)")
+                Text("\(currentScoreForTeamB)")
                     .font(.system(size: 90, weight: .heavy , design: .monospaced))
             }
+        }
+        .onAppear(perform: calculateCurrentScores)
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.NSManagedObjectContextDidSave)) { _ in calculateCurrentScores()  }
+    }
+    
+    private func calculateCurrentScores() {
+        
+        var scoreOfTeamA: Int = 0
+        var scoreOfTeamB: Int = 0
+        
+        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
+        do {
+            // Execute Fetch Request
+            let fetchedGainedPoints = try managedObjectContext.fetch(fetchRequest)
+            
+            for gainedPoint in fetchedGainedPoints {
+                if gainedPoint.isIcrementingTeamA {
+                    scoreOfTeamA += 1
+                }
+                
+                if gainedPoint.isIcrementingTeamB {
+                    scoreOfTeamB += 1
+                }
+            }
+            
+            print("A: \(scoreOfTeamA), B: \(scoreOfTeamB)")
+            currentScoreForTeamA = scoreOfTeamA
+            currentScoreForTeamB = scoreOfTeamB
+            
+        } catch {
+            let fetchError = error as NSError
+            print("⛔️ Error: \(fetchError), \(fetchError.localizedDescription)")
         }
     }
 }
@@ -62,10 +98,18 @@ struct BigButton: View {
             switch(side) {
             case .teamA:
                 onePoint.isIcrementingTeamA = true
-                print("isIcrementingTeamA")
+
+                let systemSoundID: SystemSoundID = 1010
+                AudioServicesPlaySystemSound(systemSoundID)
+                
+                print("isIcrementingTeamA - systemSoundID = \(systemSoundID)")
             case .teamB:
                 onePoint.isIcrementingTeamB = true
-                print("isIcrementingTeamB")
+
+                let systemSoundID: SystemSoundID = 1021
+                AudioServicesPlaySystemSound(systemSoundID)
+                
+                print("isIcrementingTeamB - systemSoundID = \(systemSoundID)")
             }
             
             PersistenceController.shared.save()
@@ -75,34 +119,46 @@ struct BigButton: View {
 
 struct CurrentScoreAndButtons: View {
     var body: some View {
-        GeometryReader { geometry in
-            if geometry.size.height > geometry.size.width { // portrait
-                VStack(spacing: 0) {
-                    Spacer()
-                    CurrentScore()
-                    Spacer()
-                    HStack(spacing: 0) {
-                        Spacer()
-                        BigButton(side: .teamA)
-                        Spacer()
-                        BigButton(side: .teamB)
-                        Spacer()
-                    }
-                    Spacer()
-                }
-            } else { // landscape
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        BigButton(side: .teamA)
+        VStack {
+            GeometryReader { geometry in
+                if (geometry.size.height / geometry.size.width > 1.1) { // portrait
+                    VStack(spacing: 0) {
                         Spacer()
                         CurrentScore()
                         Spacer()
-                        BigButton(side: .teamB)
+                        HStack(spacing: 0) {
+                            Spacer()
+                            BigButton(side: .teamA)
+                            Spacer()
+                            BigButton(side: .teamB)
+                            Spacer()
+                        }
                         Spacer()
                     }
-                    Spacer()
+                    .onAppear {
+                        print("geometry.size.height = \(geometry.size.height)")
+                        print("geometry.size.width = \(geometry.size.width)")
+                        print("geometry.size.height / geometry.size.width = \(geometry.size.height / geometry.size.width)")
+                    }
+                } else { // landscape
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            BigButton(side: .teamA)
+                            Spacer()
+                            CurrentScore()
+                            Spacer()
+                            BigButton(side: .teamB)
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                    .onAppear {
+                        print("geometry.size.height = \(geometry.size.height)")
+                        print("geometry.size.width = \(geometry.size.width)")
+                        print("geometry.size.height / geometry.size.width = \(geometry.size.height / geometry.size.width)")
+                    }
                 }
             }
         }

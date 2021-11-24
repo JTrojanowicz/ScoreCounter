@@ -8,12 +8,12 @@
 import SwiftUI
 import CoreData
 import Foundation
+import AVFoundation
 
 struct ContentView: View {
-    @EnvironmentObject var appInfo: AppInfo
     @Environment(\.managedObjectContext) var managedObjectContext
     
-    @State private var historyHeightRatio = 0.33
+    @State private var historyHeightRatio = 0.5
     @State private var isResetDialogShown = false
     
     var body: some View {
@@ -47,11 +47,6 @@ struct ContentView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear(perform: onAppear)
-    }
-    
-    private func onAppear() {
-        
     }
     
     private func resetWasTapped() {
@@ -60,27 +55,26 @@ struct ContentView: View {
     
     private func resetScore() {
         print("Reseting score!")
-        managedObjectContext.performAndWait {
+
+        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
+        fetchRequest.includesPropertyValues = false //This option tells Core Data that no property data should be fetched from the persistent store. Only the object identifier is returned.
+        do {
+            // Execute Fetch Request
+            let fetchedItems = try managedObjectContext.fetch(fetchRequest)
             
-            //Perform batch delete of all the elements
-            
-            do {
-                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OneGainedPoint")
-                let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                // Specify the result of the NSBatchDeleteRequest: should be the NSManagedObject IDs for the deleted objects
-                batchDeleteRequest.resultType = .resultTypeObjectIDs
-                
-                let batchDelete =  try managedObjectContext.execute(batchDeleteRequest) as? NSBatchDeleteResult
-                
-                guard let ids = batchDelete?.result as? [NSManagedObjectID] else {
-                    return
-                }
-                let deletedObjects: [AnyHashable: Any] = [NSDeletedObjectsKey: ids]
-                // Merge the delete changes into the managed object context
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [managedObjectContext])
-            } catch {
-                print("ERROR: \(error)")
+            for fetchedItem in fetchedItems {
+                managedObjectContext.delete(fetchedItem)
             }
+            
+            PersistenceController.shared.save()
+            
+            let systemSoundID: SystemSoundID = 1024
+            AudioServicesPlaySystemSound(systemSoundID)
+            
+        } catch {
+            let fetchError = error as NSError
+            print("⛔️ Error: Unable to Execute Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
         }
     }
 }
