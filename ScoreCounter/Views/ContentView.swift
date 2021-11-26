@@ -12,25 +12,28 @@ import AVFoundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @EnvironmentObject var appProperties: AppProperties
     
-    @State private var historyHeightRatio = 0.5
     @State private var isResetDialogShown = false
     
     var body: some View {
         NavigationView {
-            GeometryReader { geo in
-                VStack(alignment: .center, spacing: 0) {
-                    CurrentScoreAndButtons()
-                        .frame(width: geo.size.width, height: geo.size.height*(1-historyHeightRatio), alignment: .center)
-                    ScoreHistoryList()
-                        .frame(width: geo.size.width,
-                               height: geo.size.height*historyHeightRatio,
-                               alignment: .center)
-                        .background(Color.red)
+            VStack(alignment: .center, spacing: 0) {
+                Spacer()
+                CurrentScore()
+                Spacer()
+                HStack(spacing: 0) {
+                    Spacer()
+                    BigButton(side: .teamA)
+                    Spacer()
+                    BigButton(side: .teamB)
+                    Spacer()
                 }
+                Spacer()
+                ScoreHistoryList()
             }
             .toolbar {
-                Toolbar() {
+                Toolbar(appProperties: appProperties) {
                     Button(action: resetWasTapped) {
                         Text("Reset")
                             .actionSheet(isPresented: $isResetDialogShown) {
@@ -68,8 +71,10 @@ struct ContentView: View {
             
             PersistenceController.shared.save()
             
-            let systemSoundID: SystemSoundID = 1024
-            AudioServicesPlaySystemSound(systemSoundID)
+            if appProperties.isSpeakerON {
+                let systemSoundID: SystemSoundID = 1024
+                AudioServicesPlaySystemSound(systemSoundID)
+            }
             
         } catch {
             let fetchError = error as NSError

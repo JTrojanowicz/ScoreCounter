@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF33B4862750E2AA00B1287E /* GeometryGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF33B4852750E2AA00B1287E /* GeometryGetter.swift */; };
+		EF33B4882750EBEB00B1287E /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF33B4872750EBEB00B1287E /* BigButton.swift */; };
 		EFC9E47A2749773300199C3B /* ScoreCounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4792749773300199C3B /* ScoreCounterApp.swift */; };
 		EFC9E47C2749773300199C3B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E47B2749773300199C3B /* ContentView.swift */; };
 		EFC9E47E2749773600199C3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC9E47D2749773600199C3B /* Assets.xcassets */; };
@@ -14,7 +16,7 @@
 		EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */; };
 		EFC9E48F27497A1800199C3B /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E48E27497A1800199C3B /* Toolbar.swift */; };
 		EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */; };
-		EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */; };
+		EFC9E4932749887300199C3B /* CurrentScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4922749887300199C3B /* CurrentScore.swift */; };
 		EFC9E495274AC88400199C3B /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E494274AC88400199C3B /* PersistenceController.swift */; };
 		EFC9E498274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E496274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift */; };
 		EFC9E49B274AEAEE00199C3B /* ScoreHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EF33B4852750E2AA00B1287E /* GeometryGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryGetter.swift; sourceTree = "<group>"; };
+		EF33B4872750EBEB00B1287E /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		EFC9E4762749773300199C3B /* ScoreCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC9E4792749773300199C3B /* ScoreCounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCounterApp.swift; sourceTree = "<group>"; };
 		EFC9E47B2749773300199C3B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -31,7 +35,7 @@
 		EFC9E48C2749786100199C3B /* ScoreStorage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ScoreStorage.xcdatamodel; sourceTree = "<group>"; };
 		EFC9E48E27497A1800199C3B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryList.swift; sourceTree = "<group>"; };
-		EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScoreAndButtons.swift; sourceTree = "<group>"; };
+		EFC9E4922749887300199C3B /* CurrentScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScore.swift; sourceTree = "<group>"; };
 		EFC9E494274AC88400199C3B /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		EFC9E496274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OneGainedPoint+CoreDataClass.swift"; sourceTree = "<group>"; };
 		EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryRow.swift; sourceTree = "<group>"; };
@@ -103,9 +107,11 @@
 			children = (
 				EFC9E47B2749773300199C3B /* ContentView.swift */,
 				EFC9E48E27497A1800199C3B /* Toolbar.swift */,
-				EFC9E4922749887300199C3B /* CurrentScoreAndButtons.swift */,
+				EFC9E4922749887300199C3B /* CurrentScore.swift */,
 				EFC9E4902749880F00199C3B /* ScoreHistoryList.swift */,
 				EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */,
+				EF33B4852750E2AA00B1287E /* GeometryGetter.swift */,
+				EF33B4872750EBEB00B1287E /* BigButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -188,8 +194,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EFC9E4932749887300199C3B /* CurrentScoreAndButtons.swift in Sources */,
+				EFC9E4932749887300199C3B /* CurrentScore.swift in Sources */,
 				EFC9E49B274AEAEE00199C3B /* ScoreHistoryRow.swift in Sources */,
+				EF33B4862750E2AA00B1287E /* GeometryGetter.swift in Sources */,
+				EF33B4882750EBEB00B1287E /* BigButton.swift in Sources */,
 				EFC9E498274AD2CB00199C3B /* OneGainedPoint+CoreDataClass.swift in Sources */,
 				EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */,
 				EFC9E4912749880F00199C3B /* ScoreHistoryList.swift in Sources */,
@@ -341,7 +349,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -370,7 +378,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

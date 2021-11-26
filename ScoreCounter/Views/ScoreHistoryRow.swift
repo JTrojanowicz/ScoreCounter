@@ -35,18 +35,20 @@ struct ScoreHistoryRow: View {
                     Spacer()
                     Text("\(scoreOfTeamA)")
                         .font(.system(size: 30, weight: .bold))
+                    Spacer()
                 }
-                .frame(width: 50)
+                .frame(width: 60)
                 
                 Text(":")
                     .font(.system(size: 30, weight: .bold))
                 
                 HStack {
+                    Spacer()
                     Text("\(scoreOfTeamB)")
                         .font(.system(size: 30, weight: .bold))
                     Spacer()
                 }
-                .frame(width: 50)
+                .frame(width: 60)
                 
                 if pointForTheRow.isIcrementingTeamB {
                     Image(systemName: "arrowtriangle.up.square")

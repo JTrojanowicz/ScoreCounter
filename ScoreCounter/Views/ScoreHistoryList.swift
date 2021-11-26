@@ -12,6 +12,7 @@ import AVFoundation
 struct ScoreHistoryList: View {
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timeStamp, order: .reverse)]) var gainedPoints: FetchedResults<OneGainedPoint>
     @Environment(\.managedObjectContext) var managedObjectContext
+    @EnvironmentObject var appProperties: AppProperties
     
     let header = Text("SCORE HISTORY")
     let footer = Text("To remove individual score swipe the row to the left")
@@ -44,8 +45,10 @@ struct ScoreHistoryList: View {
             
             PersistenceController.shared.save()
             
-            let systemSoundID: SystemSoundID = 1034
-            AudioServicesPlaySystemSound(systemSoundID)
+            if appProperties.isSpeakerON {
+                let systemSoundID: SystemSoundID = 1034
+                AudioServicesPlaySystemSound(systemSoundID)
+            }
             
         } catch {
             let fetchError = error as NSError

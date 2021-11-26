@@ -10,11 +10,12 @@ import CoreData
 
 struct Toolbar<ResetButtonView: View>: ToolbarContent {
     
+    @ObservedObject var appProperties: AppProperties
+    @ViewBuilder let resetButtonView: ResetButtonView
+    
     var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
-    
-    @ViewBuilder let resetButtonView: ResetButtonView
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -22,7 +23,7 @@ struct Toolbar<ResetButtonView: View>: ToolbarContent {
         }
         
         ToolbarItem(placement: .principal) {
-            VStack {
+            VStack(spacing: 0) {
                 Text("Score Counter")
                     .font(.custom("Noteworthy-Bold", size: 30))
                 Text("ver. \(appVersion)")
@@ -30,6 +31,20 @@ struct Toolbar<ResetButtonView: View>: ToolbarContent {
                 
             }
         }
+        
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(action: toggleSpeaker) {
+                if appProperties.isSpeakerON {
+                    Image(systemName: "speaker.wave.3.fill")
+                } else {
+                    Image(systemName: "speaker.slash.fill")
+                }
+            }
+        }
+    }
+    
+    private func toggleSpeaker() {
+        appProperties.isSpeakerON.toggle()
     }
 }
 
