@@ -10,6 +10,7 @@ import CoreData
 
 struct ScoreHistoryRow: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @EnvironmentObject var appProperties: AppProperties
     
     var pointForTheRow: OneGainedPoint
     
@@ -20,12 +21,18 @@ struct ScoreHistoryRow: View {
         return pointForTheRow.timeStamp?.toString(dateFormat: "HH:mm:ss") ?? "Unknown"
     }
     
+    private var isIcrementingTeamLeft: Bool { return appProperties.isTeamAonTheLeft ? pointForTheRow.isIcrementingTeamA :  pointForTheRow.isIcrementingTeamB }
+    private var isIcrementingTeamRight: Bool { return appProperties.isTeamAonTheLeft ? pointForTheRow.isIcrementingTeamB :  pointForTheRow.isIcrementingTeamA }
+    
+    private var scoreOfTeamLeft: Int { return appProperties.isTeamAonTheLeft ? scoreOfTeamA :  scoreOfTeamB }
+    private var scoreOfTeamRight: Int { return appProperties.isTeamAonTheLeft ? scoreOfTeamB :  scoreOfTeamA }
+    
     var body: some View {
         ZStack {
             HStack(spacing: 0) {
                 Spacer()
                 
-                if pointForTheRow.isIcrementingTeamA {
+                if isIcrementingTeamLeft {
                     Image(systemName: "arrowtriangle.up.square")
                 } else {
                     Spacer().frame(width: 20)
@@ -33,7 +40,7 @@ struct ScoreHistoryRow: View {
                 
                 HStack {
                     Spacer()
-                    Text("\(scoreOfTeamA)")
+                    Text("\(scoreOfTeamLeft)")
                         .font(.system(size: 30, weight: .bold))
                     Spacer()
                 }
@@ -44,13 +51,13 @@ struct ScoreHistoryRow: View {
                 
                 HStack {
                     Spacer()
-                    Text("\(scoreOfTeamB)")
+                    Text("\(scoreOfTeamRight)")
                         .font(.system(size: 30, weight: .bold))
                     Spacer()
                 }
                 .frame(width: 60)
                 
-                if pointForTheRow.isIcrementingTeamB {
+                if isIcrementingTeamRight {
                     Image(systemName: "arrowtriangle.up.square")
                 } else {
                     Spacer().frame(width: 20)
@@ -80,6 +87,8 @@ struct ScoreHistoryRow: View {
         
         let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(OneGainedPoint.timeStamp), ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", pointForTheRow.setNumber) //filter out all the scores gained at different sets
+        
         do {
             // Execute Fetch Request
             let allGainedPoints = try managedObjectContext.fetch(fetchRequest)

@@ -9,36 +9,53 @@ import SwiftUI
 import CoreData
 
 struct CurrentScore: View {
+    @EnvironmentObject var appProperties: AppProperties
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @State private var currentScoreForTeamA = 0
     @State private var currentScoreForTeamB = 0
+    @State private var isLeftPopoverPresent = false
+    @State private var isRightPopoverPresent = false
     
-    var teamLabelFontSize: CGFloat {
-        return horizontalSizeClass == .compact ? 25 : 30
-    }
+    var teamLabelFontSize: CGFloat { return horizontalSizeClass == .compact ? 25 : 30 }
     
-    var scoreFontSize: CGFloat {
-        return horizontalSizeClass == .compact ? 70 : 90
-    }
+    var scoreFontSize: CGFloat { return horizontalSizeClass == .compact ? 70 : 90 }
     
-    var scoreSize: CGFloat {
-        return horizontalSizeClass == .compact ? 110 : 150
-    }
+    var gainedSetsScoreFontSize: CGFloat { return horizontalSizeClass == .compact ? 30 : 50 }
+    
+    var scoreSize: CGFloat { return horizontalSizeClass == .compact ? 110 : 150 }
+    
+    var teamNameLeft: String { return appProperties.isTeamAonTheLeft ? appProperties.nameOfTeamA : appProperties.nameOfTeamB }
+    var teamNameRight: String { return appProperties.isTeamAonTheLeft ? appProperties.nameOfTeamB : appProperties.nameOfTeamA }
+    
+    var teamScoreLeft: String { return appProperties.isTeamAonTheLeft ? String(currentScoreForTeamA) : String(currentScoreForTeamB) }
+    var teamScoreRight: String { return appProperties.isTeamAonTheLeft ? String(currentScoreForTeamB) : String(currentScoreForTeamA) }
+    
+    var gainedSetsTeamLeft: String { return appProperties.isTeamAonTheLeft ? String(appProperties.gainedSetsOfTeamA) : String(appProperties.gainedSetsOfTeamB) }
+    var gainedSetsTeamRight: String { return appProperties.isTeamAonTheLeft ? String(appProperties.gainedSetsOfTeamB) : String(appProperties.gainedSetsOfTeamA) }
     
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(alignment: .bottom, spacing: 0) {
+            Spacer()
+            Text("(\(gainedSetsTeamLeft))")
+                .font(.system(size: gainedSetsScoreFontSize, weight: .bold, design: .monospaced))
+                .foregroundColor(.gray)
+                .padding()
+            Spacer()
             VStack {
-                Text("Team A")
+                Text(teamNameLeft)
                     .font(.system(size: teamLabelFontSize, weight: .heavy , design: .rounded))
+                    .multilineTextAlignment(.center)
+                    .onTapGesture { isLeftPopoverPresent = true }
+                    .popover(isPresented: $isLeftPopoverPresent) { NameChangerView(isItLeftSide: true, popoverPresent: $isLeftPopoverPresent) }
                 HStack {
                     Spacer()
-                    Text("\(currentScoreForTeamA)")
+                    Text(teamScoreLeft)
                         .font(.system(size: scoreFontSize, weight: .heavy, design: .monospaced))
+                        .frame(width: scoreSize)
                     Spacer()
                 }
-                .frame(width: scoreSize)
             }
             VStack {
                 Text(" ")
@@ -47,20 +64,29 @@ struct CurrentScore: View {
                     .font(.system(size: scoreFontSize, weight: .heavy , design: .monospaced))
             }
             VStack {
-                Text("Team B")
+                Text(teamNameRight)
                     .font(.system(size: teamLabelFontSize, weight: .heavy , design: .rounded))
+                    .multilineTextAlignment(.center)
+                    .onTapGesture { isRightPopoverPresent = true }
+                    .popover(isPresented: $isRightPopoverPresent) { NameChangerView(isItLeftSide: false, popoverPresent: $isRightPopoverPresent) }
                 HStack {
                     Spacer()
-                    Text("\(currentScoreForTeamB)")
+                    Text(teamScoreRight)
                         .font(.system(size: scoreFontSize, weight: .heavy , design: .monospaced))
+                        .frame(width: scoreSize)
                     Spacer()
                 }
-                .frame(width: scoreSize)
             }
+            Spacer()
+            Text("(\(gainedSetsTeamRight))")
+                .font(.system(size: gainedSetsScoreFontSize, weight: .bold, design: .monospaced))
+                .foregroundColor(.gray)
+                .padding()
+            Spacer()
         }
-        .padding()
         .onAppear(perform: calculateCurrentScores)
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.NSManagedObjectContextDidSave)) { _ in calculateCurrentScores()  }
+        .onChange(of: appProperties.currentSet, perform: { _ in calculateCurrentScores() })
     }
     
     private func calculateCurrentScores() {
@@ -69,6 +95,8 @@ struct CurrentScore: View {
         var scoreOfTeamB: Int = 0
         
         let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", appProperties.currentSet) //filter out all the scores gained at different sets
+        
         do {
             // Execute Fetch Request
             let fetchedGainedPoints = try managedObjectContext.fetch(fetchRequest)
@@ -94,4 +122,29 @@ struct CurrentScore: View {
     }
 }
 
+struct NameChangerView: View {
+    @EnvironmentObject var appProperties: AppProperties
+    
+    var isItLeftSide: Bool
+    @Binding var popoverPresent: Bool
+    
+    @State private var newName: String = ""
+    
+    var body: some View {
+        TextField("Click to set a new name", text: $newName).labelsHidden()
+            .padding()
+            .onSubmit { popoverPresent = false }
+            .onChange(of: newName, perform: onChange_NewName)
+    }
+    
+    private func onChange_NewName(newNameString: String) {
+        guard newNameString.isEmpty == false, newNameString != appProperties.nameOfTeamA, newNameString != appProperties.nameOfTeamB else { return }
+        
+        if isItLeftSide == appProperties.isTeamAonTheLeft {
+            appProperties.nameOfTeamA = newNameString
+        } else {
+            appProperties.nameOfTeamB = newNameString
+        }
+    }
+}
 

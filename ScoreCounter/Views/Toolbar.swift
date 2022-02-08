@@ -8,10 +8,14 @@
 import SwiftUI
 import CoreData
 
-struct Toolbar<ResetButtonView: View>: ToolbarContent {
-    
+struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, TrashButtonView: View>: ToolbarContent {
+    @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var appProperties: AppProperties
-    @ViewBuilder let resetButtonView: ResetButtonView
+    
+    @ViewBuilder var previousSetView: PreviousSetView
+    @ViewBuilder var undoButtonView: UndoButtonView
+    @ViewBuilder var newSetView: NewSetView
+    @ViewBuilder var trashButtonView: TrashButtonView
     
     var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -19,13 +23,16 @@ struct Toolbar<ResetButtonView: View>: ToolbarContent {
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            resetButtonView
+            HStack {
+                undoButtonView
+                newSetView
+            }
         }
         
         ToolbarItem(placement: .principal) {
             VStack(spacing: 0) {
                 Text("Score Counter")
-                    .font(.custom("Noteworthy-Bold", size: 30))
+                    .font(.custom("Noteworthy-Bold", size: 22))
                 Text("ver. \(appVersion)")
                     .font(.system(size: 10, weight: .medium, design:.default))
                 
@@ -33,11 +40,14 @@ struct Toolbar<ResetButtonView: View>: ToolbarContent {
         }
         
         ToolbarItem(placement: .navigationBarTrailing) {
-            Button(action: toggleSpeaker) {
-                if appProperties.isSpeakerON {
-                    Image(systemName: "speaker.wave.3.fill")
-                } else {
-                    Image(systemName: "speaker.slash.fill")
+            HStack {
+                trashButtonView
+                Button(action: toggleSpeaker) {
+                    if appProperties.isSpeakerON {
+                        Image(systemName: "speaker.wave.3.fill")
+                    } else {
+                        Image(systemName: "speaker.slash.fill")
+                    }
                 }
             }
         }

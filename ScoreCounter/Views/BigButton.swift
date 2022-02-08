@@ -30,14 +30,15 @@ struct BigButton: View {
                 .scaledToFit()
                 .frame(width: buttonSize, height: buttonSize)
         }
-        .padding()
     }
     
     private func scoreIcrement() {
+        
         managedObjectContext.performAndWait {
             let onePoint = OneGainedPoint(context: managedObjectContext)
             
             onePoint.timeStamp = Date()
+            onePoint.setNumber = Int16(appProperties.currentSet)
             
             switch(side) {
             case .teamA:
@@ -63,5 +64,7 @@ struct BigButton: View {
             
             PersistenceController.shared.save()
         }
+        
+        appProperties.setSelectedAtTabView = appProperties.currentSet //make sure the user observes the history of the current set
     }
 }
