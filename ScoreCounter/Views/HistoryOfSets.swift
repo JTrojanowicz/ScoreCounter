@@ -35,7 +35,7 @@ struct ScoreHistoryList: View {
         let fetchRequest: NSFetchRequest<OneGainedPoint>  = OneGainedPoint.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "setNumber == %i", setNumber)
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \OneGainedPoint.timeStamp, ascending: false)]
-        _gainedPoints = FetchRequest(fetchRequest: fetchRequest, animation: .easeInOut(duration: 20))
+        _gainedPoints = FetchRequest(fetchRequest: fetchRequest, animation: .easeInOut)
     }
     
     var body: some View {

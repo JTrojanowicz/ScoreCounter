@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import AVFoundation
 
-enum ButtonSide {
+enum Team {
     case teamA, teamB
 }
 
@@ -22,7 +22,7 @@ struct BigButton: View {
         return horizontalSizeClass == .compact ? 120 : 170
     }
     
-    var side: ButtonSide
+    var side: Team
     var body: some View {
         Button(action: scoreIcrement) {
             Image(systemName: "plus.app.fill")

@@ -22,9 +22,11 @@ struct ContentView: View {
     @State private var isUndoLastScoreButtonShown = false
     @State private var isNewSetButtonShown = false
     @State private var isTrashButtonShown = false
+    @State private var isAlertShown = false
+    @State private var alertMessage = ""
     
-    private var teamOnTheLeft: ButtonSide { appProperties.isTeamAonTheLeft ? .teamA : .teamB }
-    private var teamOnTheRight: ButtonSide { appProperties.isTeamAonTheLeft ? .teamB : .teamA }
+    private var teamOnTheLeft: Team { appProperties.isTeamAonTheLeft ? .teamA : .teamB }
+    private var teamOnTheRight: Team { appProperties.isTeamAonTheLeft ? .teamB : .teamA }
     
     var body: some View {
         GeometryReader { geo in
@@ -100,6 +102,7 @@ struct ContentView: View {
                     })
                 }
                 .navigationBarTitleDisplayMode(.inline)
+                .alert(isPresented: $isAlertShown, content: alertContent)
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear(perform: showOrRemoveToolbarButtons)
@@ -114,130 +117,119 @@ struct ContentView: View {
         appProperties.currentSet -= 1
         appProperties.isTeamAonTheLeft.toggle() //swap the courts
         appProperties.setSelectedAtTabView = appProperties.currentSet //initially select the new tab (later the user can change it)
+        
+        try? calculateGainedSets() // this should always work because it is going back in the sets
     }
     
     private func createNewSet() {
         guard appProperties.currentSet < 5 else { return } //there can be no more than 5 sets
         
-        appProperties.currentSet += 1 //increment the current set number
-        appProperties.isTeamAonTheLeft.toggle() //swap the courts
-        appProperties.setSelectedAtTabView = appProperties.currentSet //initially select the new tab (later the user can change it)
+        do {
+            appProperties.currentSet += 1 //increment the current set number
+            
+            try calculateGainedSets()
+            
+            appProperties.isTeamAonTheLeft.toggle() //swap the courts
+            appProperties.setSelectedAtTabView = appProperties.currentSet //initially select the new tab (later the user can change it)
+            
+        } catch {
+            appProperties.currentSet -= 1 //go to the previous set number
+            if let error = error as? String {
+                alertMessage = error
+                isAlertShown = true
+            }
+        }
         
         isNewSetButtonPopoverShown = false
     }
     
-    private func undoLastScore() {
+    private func calculateGainedSets() throws {
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        var gainedSetsOfTeamA = 0
+        var gainedSetsOfTeamB = 0
         
-        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
-        fetchRequest.includesPropertyValues = false //This option tells Core Data that no property data should be fetched from the persistent store. Only the object identifier is returned.
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(OneGainedPoint.timeStamp), ascending: false)] //last item will come first
-        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", appProperties.currentSet) //filter out the items other than for the currentSet
-        fetchRequest.fetchLimit = 1
-        
-        do {
-            let fetchedItems = try managedObjectContext.fetch(fetchRequest) // Execute Fetch Request
-            
-            if let lastItem = fetchedItems.first { //there will only one item or none
-                managedObjectContext.delete(lastItem)
-                
-                PersistenceController.shared.save()
-                
-                if appProperties.isSpeakerON {
-                    let systemSoundID: SystemSoundID = 1034
-                    AudioServicesPlaySystemSound(systemSoundID)
-                }
+        for setNumber in 1..<appProperties.currentSet {
+            let score = coreDataOperations.getScore(of: setNumber, with: Date() /* making it "now" means that the calculation should be made for all the set */)
+            if score.teamA > (score.teamB + 1) {
+                gainedSetsOfTeamA += 1
+            } else if score.teamB > (score.teamA + 1) {
+                gainedSetsOfTeamB += 1
+            } else {
+                throw "A team can win only with minimum two-point advantage"
             }
-            
-        } catch {
-            let fetchError = error as NSError
-            print("⛔️ Error: \(fetchError), \(fetchError.localizedDescription)")
         }
         
-        isUndoButtonPopoverShown = false
+        appProperties.gainedSetsOfTeamA = gainedSetsOfTeamA
+        appProperties.gainedSetsOfTeamB = gainedSetsOfTeamB
+    }
+    
+    private func undoLastScore() {
+        
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        if coreDataOperations.removeLastScore(of: appProperties.currentSet) {
+            if appProperties.isSpeakerON {
+                let systemSoundID: SystemSoundID = 1034
+                AudioServicesPlaySystemSound(systemSoundID)
+            }
+            
+            isUndoButtonPopoverShown = false
+        }
     }
     
     private func eraseAllScoresAndSets() {
-        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
-        fetchRequest.includesPropertyValues = false //This option tells Core Data that no property data should be fetched from the persistent store. Only the object identifier is returned.
-        do {
-            // Execute Fetch Request
-            let fetchedItems = try managedObjectContext.fetch(fetchRequest)
-            
-            for fetchedItem in fetchedItems {
-                managedObjectContext.delete(fetchedItem)
-            }
-            
-            PersistenceController.shared.save()
-            
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        if coreDataOperations.eraseEverything() {
             if appProperties.isSpeakerON {
                 let systemSoundID: SystemSoundID = 1024
                 AudioServicesPlaySystemSound(systemSoundID)
             }
             
-        } catch {
-            let fetchError = error as NSError
-            print("⛔️ Error: Unable to Execute Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            appProperties.currentSet = 1 //reset to the first set
+            appProperties.setSelectedAtTabView = 1
+            isTrashButtonPopoverShown = false
+            
+            try? calculateGainedSets() // this should always work
         }
-        
-        appProperties.currentSet = 1 //reset to the first set
-        appProperties.setSelectedAtTabView = 1
-        isTrashButtonPopoverShown = false
     }
     
     private func showOrRemoveToolbarButtons() {
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        let fetchedPoints = coreDataOperations.fetchGainedPoints(of: appProperties.currentSet)
         
-        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", appProperties.currentSet) //filter out the items other than for the currentSet
+        // isGoToPreviousSetButtonShown
+        if appProperties.currentSet == 1 {
+            isGoToPreviousSetButtonShown = false
+        } else if appProperties.currentSet > 1 {
+            isGoToPreviousSetButtonShown = fetchedPoints.count == 0 ? true : false
+        }
         
-        do {
-            let fetchedItems = try managedObjectContext.fetch(fetchRequest) // Execute Fetch Request
+        // isUndoLastScoreButtonShown
+        isUndoLastScoreButtonShown = fetchedPoints.count > 0 ? true : false
         
-            // show or remove appropriate buttons from the toolbar:
+        // isNewSetButtonShown
+        if appProperties.currentSet < 5 {
             
-            // isGoToPreviousSetButtonShown
-            if appProperties.currentSet == 1 {
-                isGoToPreviousSetButtonShown = false
-            } else if appProperties.currentSet > 1 {
-                isGoToPreviousSetButtonShown = fetchedItems.count == 0 ? true : false
-            }
-            
-            // isUndoLastScoreButtonShown
-            isUndoLastScoreButtonShown = fetchedItems.count > 0 ? true : false
-            
-            // isNewSetButtonShown
-            if appProperties.currentSet < 5 {
-                
-                var scoreOfTeamA: Int = 0
-                var scoreOfTeamB: Int = 0
-                
-                for gainedPoint in fetchedItems {
-                    if gainedPoint.isIcrementingTeamA {
-                        scoreOfTeamA += 1
-                    }
-                    
-                    if gainedPoint.isIcrementingTeamB {
-                        scoreOfTeamB += 1
-                    }
-                }
-                
-                if scoreOfTeamA >= 15 || scoreOfTeamB >= 15 {
-                    isNewSetButtonShown = true
-                } else {
-                    isNewSetButtonShown = false
-                }
-                
+            let score = coreDataOperations.getScore(of: appProperties.currentSet, with: Date())
+            if score.teamA >= 15 || score.teamB >= 15 {
+                isNewSetButtonShown = true
             } else {
                 isNewSetButtonShown = false
             }
             
-            // isTrashButtonShown
-            isTrashButtonShown = fetchedItems.count > 0 ? true : false
-            
-        } catch {
-            let fetchError = error as NSError
-            print("⛔️ Error: \(fetchError), \(fetchError.localizedDescription)")
+        } else {
+            isNewSetButtonShown = false
         }
+        
+        // isTrashButtonShown
+        let fetchedPointsOfAllSets = coreDataOperations.fetchGainedPointsOfAllSets()
+        isTrashButtonShown = fetchedPointsOfAllSets.count > 0 ? true : false
+    }
+    
+    private func alertContent() -> Alert {
+        Alert(
+            title: Text(alertMessage),
+            dismissButton: Alert.Button.default(Text("Continue playing"))
+        )
     }
 }
 
@@ -249,7 +241,7 @@ struct NewSetPopover: View {
             Text("Finishing this set and starting a new one within the same game")
                 .foregroundColor(Color("BlackWhite"))
                 .font(.system(size: 16, weight: .bold))
-            Text("Moving to a new set will result in gaining a set for one of the teams and also swapping the courts.\nThe history of gained points for the current set will be removed")
+            Text("Moving to a new set will result in gaining a set for one of the teams and also swapping the playing courts")
                 .foregroundColor(Color("BlackWhite"))
                 .font(.system(size: 14))
             Button(action: confirmAction) {
@@ -271,7 +263,7 @@ struct UndoScorePopover: View {
     let confirmAction: () -> Void
     var body: some View {
         VStack(spacing: 12) {
-            Text("It will undo the last score")
+            Text("It will undo the last gained point")
                 .foregroundColor(Color("BlackWhite"))
                 .font(.system(size: 16, weight: .bold))
             Button(action: confirmAction) {

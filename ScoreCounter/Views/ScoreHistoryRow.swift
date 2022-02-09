@@ -81,39 +81,10 @@ struct ScoreHistoryRow: View {
     }
     
     private func calculateScoreForTheRow() {
-        
-        var scoreA = 0
-        var scoreB = 0
-        
-        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(OneGainedPoint.timeStamp), ascending: true)]
-        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", pointForTheRow.setNumber) //filter out all the scores gained at different sets
-        
-        do {
-            // Execute Fetch Request
-            let allGainedPoints = try managedObjectContext.fetch(fetchRequest)
-            
-            for fetchedPoint in allGainedPoints {
-                if let timeStampOfFetchedPoint = fetchedPoint.timeStamp, let timeStampOfPointOfTheRow = pointForTheRow.timeStamp {
-                    if timeStampOfFetchedPoint <= timeStampOfPointOfTheRow {
-                        if fetchedPoint.isIcrementingTeamA {
-                            scoreA += 1
-                        }
-                        
-                        if fetchedPoint.isIcrementingTeamB {
-                            scoreB += 1
-                        }
-                    }
-                }
-            }
-            
-            scoreOfTeamA = scoreA
-            scoreOfTeamB = scoreB
-            
-        } catch {
-            let fetchError = error as NSError
-            print("⛔️ Error: \(fetchError), \(fetchError.localizedDescription)")
-        }
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        let score = coreDataOperations.getScore(of: pointForTheRow.setNumber, with: pointForTheRow.timeStamp)
+        scoreOfTeamA = score.teamA
+        scoreOfTeamB = score.teamB
     }
 }
 

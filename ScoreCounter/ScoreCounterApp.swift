@@ -25,7 +25,7 @@ struct ScoreCounterApp: App {
 }
 
 class AppProperties: ObservableObject {
-    @Published var isSpeakerON = false
+    
     @AppStorage("nameOfTeamA") var nameOfTeamA = "Octopuses 🐙" /*defaul value if the key does not exist in UserDefaults - BUT: THIS WILL NOT INITIALISE USERDEFAULTS and will not set it - you need to do it explicitly*/ {
         willSet { objectWillChange.send() } // see: https://developer.apple.com/forums/thread/652384
     }
@@ -38,10 +38,10 @@ class AppProperties: ObservableObject {
     @AppStorage("gainedSetsOfTeamB")  var gainedSetsOfTeamB = 0 {
         willSet { objectWillChange.send() }
     }
+    
+    @Published var isSpeakerON = false
     @Published var isTeamAonTheLeft = true
-    
     @Published var currentSet = 1
-    
     @Published var setSelectedAtTabView = 1
     
     var teamNameLeft: String { return isTeamAonTheLeft ? nameOfTeamA : nameOfTeamB }

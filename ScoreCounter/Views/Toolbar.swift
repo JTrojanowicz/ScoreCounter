@@ -24,6 +24,7 @@ struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, Tr
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             HStack {
+                previousSetView
                 undoButtonView
                 newSetView
             }

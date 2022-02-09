@@ -91,34 +91,12 @@ struct CurrentScore: View {
     
     private func calculateCurrentScores() {
         
-        var scoreOfTeamA: Int = 0
-        var scoreOfTeamB: Int = 0
+        let coreDataOperations = CoreDataOperations(moc: managedObjectContext)
+        let score = coreDataOperations.getScore(of: appProperties.currentSet, with: Date())
         
-        let fetchRequest: NSFetchRequest<OneGainedPoint> = OneGainedPoint.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "setNumber == %i", appProperties.currentSet) //filter out all the scores gained at different sets
-        
-        do {
-            // Execute Fetch Request
-            let fetchedGainedPoints = try managedObjectContext.fetch(fetchRequest)
-            
-            for gainedPoint in fetchedGainedPoints {
-                if gainedPoint.isIcrementingTeamA {
-                    scoreOfTeamA += 1
-                }
-                
-                if gainedPoint.isIcrementingTeamB {
-                    scoreOfTeamB += 1
-                }
-            }
-            
-            print("A: \(scoreOfTeamA), B: \(scoreOfTeamB)")
-            currentScoreForTeamA = scoreOfTeamA
-            currentScoreForTeamB = scoreOfTeamB
-            
-        } catch {
-            let fetchError = error as NSError
-            print("⛔️ Error: \(fetchError), \(fetchError.localizedDescription)")
-        }
+        currentScoreForTeamA = score.teamA
+        currentScoreForTeamB = score.teamB
+        print("A: \(currentScoreForTeamA), B: \(currentScoreForTeamB)")
     }
 }
 
