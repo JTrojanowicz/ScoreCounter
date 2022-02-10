@@ -13,22 +13,37 @@ enum Team {
     case teamA, teamB
 }
 
+struct BigButtons: View {
+    @EnvironmentObject var appProperties: AppProperties
+    @Environment(\.horizontalSizeClass) var sizeClass
+    
+    private var teamOnTheLeft: Team { appProperties.isTeamAonTheLeft ? .teamA : .teamB }
+    private var teamOnTheRight: Team { appProperties.isTeamAonTheLeft ? .teamB : .teamA }
+    private var sideLength: CGFloat { sizeClass == .regular ? 150 : 100 }
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            BigButton(side: teamOnTheLeft)
+                .frame(width: sideLength, height: sideLength)
+            Spacer()
+            BigButton(side: teamOnTheRight)
+                .frame(width: sideLength, height: sideLength)
+            Spacer()
+        }
+    }
+}
+
 struct BigButton: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var appProperties: AppProperties
     
-    var buttonSize: CGFloat {
-        return horizontalSizeClass == .compact ? 120 : 170
-    }
+    let side: Team
     
-    var side: Team
     var body: some View {
         Button(action: scoreIcrement) {
             Image(systemName: "plus.app.fill")
                 .resizable()
-                .scaledToFit()
-                .frame(width: buttonSize, height: buttonSize)
         }
     }
     

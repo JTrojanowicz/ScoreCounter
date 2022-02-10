@@ -11,6 +11,7 @@ import CoreData
 struct ScoreHistoryRow: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var appProperties: AppProperties
+    @Environment(\.horizontalSizeClass) var sizeClass
     
     var pointForTheRow: OneGainedPoint
     
@@ -27,6 +28,9 @@ struct ScoreHistoryRow: View {
     private var scoreOfTeamLeft: Int { return appProperties.isTeamAonTheLeft ? scoreOfTeamA :  scoreOfTeamB }
     private var scoreOfTeamRight: Int { return appProperties.isTeamAonTheLeft ? scoreOfTeamB :  scoreOfTeamA }
     
+    private var scoreFontSize: CGFloat { return sizeClass == .regular ? 30 : 20 }
+    private var scoreTextFrameWidth: CGFloat { return sizeClass == .regular ? 60 : 45 }
+    
     var body: some View {
         ZStack {
             HStack(spacing: 0) {
@@ -41,21 +45,21 @@ struct ScoreHistoryRow: View {
                 HStack {
                     Spacer()
                     Text("\(scoreOfTeamLeft)")
-                        .font(.system(size: 30, weight: .bold))
+                        .font(.system(size: scoreFontSize, weight: .bold))
                     Spacer()
                 }
-                .frame(width: 60)
+                .frame(width: scoreTextFrameWidth)
                 
                 Text(":")
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.system(size: scoreFontSize, weight: .bold))
                 
                 HStack {
                     Spacer()
                     Text("\(scoreOfTeamRight)")
-                        .font(.system(size: 30, weight: .bold))
+                        .font(.system(size: scoreFontSize, weight: .bold))
                     Spacer()
                 }
-                .frame(width: 60)
+                .frame(width: scoreTextFrameWidth)
                 
                 if isIcrementingTeamRight {
                     Image(systemName: "arrowtriangle.up.square")
@@ -70,7 +74,7 @@ struct ScoreHistoryRow: View {
                 VStack {
                     Spacer()
                     Text("\(timeStamp)")
-                        .font(.system(size: 12, weight: .thin, design: .monospaced))
+                        .font(.system(size: 12, weight: .thin, design: .default))
                 }
             }
         }

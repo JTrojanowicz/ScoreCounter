@@ -25,40 +25,20 @@ struct ContentView: View {
     @State private var isAlertShown = false
     @State private var alertMessage = ""
     
-    private var teamOnTheLeft: Team { appProperties.isTeamAonTheLeft ? .teamA : .teamB }
-    private var teamOnTheRight: Team { appProperties.isTeamAonTheLeft ? .teamB : .teamA }
+    var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
     
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { geo in // it looks like using GeometryReader also somewhere else (in a nested view) mess up the views... (also it is better to use it on the top of the view)
             NavigationView {
                 VStack {
-                    VStack(spacing: 0) {
-                        Spacer()
-                        VStack {
-                            Text("Set no.")
-                                .font(.system(size: 20, weight: .bold , design: .rounded))
-                                .foregroundColor(.gray)
-                            Text("\(appProperties.currentSet)")
-                                .font(.system(size: 26, weight: .heavy , design: .monospaced))
-                                .foregroundColor(.gray)
-                        }
-                        CurrentScore()
-                        Spacer()
-                        HStack(spacing: 0) {
-                            Spacer()
-                            BigButton(side: teamOnTheLeft)
-                            Spacer()
-                            BigButton(side: teamOnTheRight)
-                            Spacer()
-                        }
-                        Spacer()
-                    }
-                    .background(RoundedRectangle(cornerRadius: 8).foregroundColor(Color("WhiteBlack")).shadow(radius: 8))
-                    .frame(height: geo.size.height*3/5)
-                    .padding()
-                    
-                    Spacer()
-                    HistoryOfSets()
+                    ScoresPanel()
+                        .frame(height: geo.size.height*3/5)
+                        .background(RoundedRectangle(cornerRadius: 8).foregroundColor(Color("White-DarkGray")).shadow(radius: 8))
+                        .padding()
+                        
+                    HistoryOfSets() //List view behaves like a Spacer() --> it fills possible space in the container (or even with greater force it pushes other view... I don't understand it.., eg. replacing it with Spacer will NOT get the same results - it is stronger.)
                         .padding()
                 }
                 .toolbar {
@@ -83,11 +63,29 @@ struct ContentView: View {
                             newSetView: {
                                 if isNewSetButtonShown {
                                     Button(action: { isNewSetButtonPopoverShown = true }) {
-                                        Text("New set")
+                                        if geo.size.width > 400 {
+                                            Text("New set")
+                                                .popover(isPresented: $isNewSetButtonPopoverShown) {
+                                                    NewSetPopover(confirmAction: createNewSet)
+                                                }
+                                        } else { // .compact
+                                            VStack(spacing: 0) {
+                                                Text("New")
+                                                Text("set")
+                                            }
                                             .popover(isPresented: $isNewSetButtonPopoverShown) {
                                                 NewSetPopover(confirmAction: createNewSet)
                                             }
+                                        }
                                     }
+                                }
+                            },
+                            titleView: {
+                                VStack(spacing: 0) {
+                                    Text("Score Counter")
+                                        .font(.custom("Noteworthy-Bold", size: /*geo.size.width > 400 ? 22 :*/ 18))
+                                    Text("ver. \(appVersion)")
+                                        .font(.system(size: 10, weight: .medium, design:.default))
                                 }
                             },
                             trashButtonView: {
@@ -186,6 +184,7 @@ struct ContentView: View {
             
             appProperties.currentSet = 1 //reset to the first set
             appProperties.setSelectedAtTabView = 1
+            appProperties.isTeamAonTheLeft = true
             isTrashButtonPopoverShown = false
             
             try? calculateGainedSets() // this should always work
@@ -230,77 +229,6 @@ struct ContentView: View {
             title: Text(alertMessage),
             dismissButton: Alert.Button.default(Text("Continue playing"))
         )
-    }
-}
-
-//======================================================================================
-struct NewSetPopover: View {
-    let confirmAction: () -> Void
-    var body: some View {
-        VStack(spacing: 12) {
-            Text("Finishing this set and starting a new one within the same game")
-                .foregroundColor(Color("BlackWhite"))
-                .font(.system(size: 16, weight: .bold))
-            Text("Moving to a new set will result in gaining a set for one of the teams and also swapping the playing courts")
-                .foregroundColor(Color("BlackWhite"))
-                .font(.system(size: 14))
-            Button(action: confirmAction) {
-                Text("Confirm")
-                    .font(.system(size: 16, weight: .heavy))
-                    .foregroundColor(.red)
-                    .background(RoundedRectangle(cornerRadius: 8).frame(width: 250, height: 50).foregroundColor(Color("WhiteBlack")).shadow(radius: 8))
-            }
-            .padding(.top)
-            Spacer()
-        }
-        .padding()
-        .frame(width: 300)
-    }
-}
-
-//======================================================================================
-struct UndoScorePopover: View {
-    let confirmAction: () -> Void
-    var body: some View {
-        VStack(spacing: 12) {
-            Text("It will undo the last gained point")
-                .foregroundColor(Color("BlackWhite"))
-                .font(.system(size: 16, weight: .bold))
-            Button(action: confirmAction) {
-                Text("Confirm")
-                    .font(.system(size: 16, weight: .heavy))
-                    .foregroundColor(.red)
-                    .background(RoundedRectangle(cornerRadius: 8).frame(width: 250, height: 50).foregroundColor(Color("WhiteBlack")).shadow(radius: 8))
-            }
-            .padding(.top)
-            Spacer()
-        }
-        .padding()
-        .frame(width: 300)
-    }
-}
-//======================================================================================
-struct TrashButtonPopover: View {
-    let confirmAction: () -> Void
-    var body: some View {
-        VStack(spacing: 12) {
-            Text("Finishing the game")
-                .foregroundColor(Color("BlackWhite"))
-                .font(.system(size: 16, weight: .bold))
-            Text("Finishing the game will result in erasing all the scores (both the points and the sets).\n\nYou cannot undo this action")
-                .foregroundColor(Color("BlackWhite"))
-                .font(.system(size: 14))
-            Button(action: confirmAction) {
-                Text("CONFIRM")
-                    .font(.system(size: 16, weight: .heavy))
-                    .foregroundColor(Color("WhiteBlack"))
-                    .background(RoundedRectangle(cornerRadius: 8).frame(width: 250, height: 50).foregroundColor(.red).shadow(radius: 8))
-            }
-            .padding(.top)
-            Spacer()
-        }
-        .padding()
-        .frame(width: 300)
     }
 }
 

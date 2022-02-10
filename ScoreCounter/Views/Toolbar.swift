@@ -8,18 +8,15 @@
 import SwiftUI
 import CoreData
 
-struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, TrashButtonView: View>: ToolbarContent {
+struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, TitleView: View, TrashButtonView: View>: ToolbarContent {
     @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var appProperties: AppProperties
     
     @ViewBuilder var previousSetView: PreviousSetView
     @ViewBuilder var undoButtonView: UndoButtonView
     @ViewBuilder var newSetView: NewSetView
+    @ViewBuilder var titleView: TitleView
     @ViewBuilder var trashButtonView: TrashButtonView
-    
-    var appVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    }
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -31,13 +28,7 @@ struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, Tr
         }
         
         ToolbarItem(placement: .principal) {
-            VStack(spacing: 0) {
-                Text("Score Counter")
-                    .font(.custom("Noteworthy-Bold", size: 22))
-                Text("ver. \(appVersion)")
-                    .font(.system(size: 10, weight: .medium, design:.default))
-                
-            }
+            titleView
         }
         
         ToolbarItem(placement: .navigationBarTrailing) {
