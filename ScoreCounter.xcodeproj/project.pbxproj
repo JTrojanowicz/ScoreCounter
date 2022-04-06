@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		EF1A0BE727B3E06C00D99B27 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1A0BE627B3E06C00D99B27 /* String.swift */; };
-		EF21674F27B3F97B004241EB /* PopoverViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF21674E27B3F97B004241EB /* PopoverViews.swift */; };
+		EF21674F27B3F97B004241EB /* NewSetPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF21674E27B3F97B004241EB /* NewSetPopover.swift */; };
 		EF21675327B52739004241EB /* ScoresPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF21675227B52739004241EB /* ScoresPanel.swift */; };
 		EF21675527B56111004241EB /* TeamsLabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF21675427B56111004241EB /* TeamsLabelsView.swift */; };
 		EF33B4862750E2AA00B1287E /* GeometryGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF33B4852750E2AA00B1287E /* GeometryGetter.swift */; };
 		EF33B4882750EBEB00B1287E /* BigButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF33B4872750EBEB00B1287E /* BigButtons.swift */; };
+		EF4246DF27F4787A00A872D3 /* ContentView-ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4246DE27F4787A00A872D3 /* ContentView-ViewModel.swift */; };
+		EF4246E127F4845500A872D3 /* AppProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4246E027F4845500A872D3 /* AppProperties.swift */; };
+		EF4246E327F490A700A872D3 /* UndoScorePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4246E227F490A700A872D3 /* UndoScorePopover.swift */; };
+		EF4246E527F490DA00A872D3 /* TrashButtonPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4246E427F490DA00A872D3 /* TrashButtonPopover.swift */; };
+		EF54E39927FDC1D400411EDD /* MorePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF54E39827FDC1D400411EDD /* MorePopover.swift */; };
+		EFAEA0BF27FDCF8C005A95EC /* LabelStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAEA0BE27FDCF8C005A95EC /* LabelStyles.swift */; };
 		EFC9E47A2749773300199C3B /* ScoreCounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E4792749773300199C3B /* ScoreCounterApp.swift */; };
 		EFC9E47C2749773300199C3B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9E47B2749773300199C3B /* ContentView.swift */; };
 		EFC9E47E2749773600199C3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC9E47D2749773600199C3B /* Assets.xcassets */; };
@@ -29,11 +35,17 @@
 
 /* Begin PBXFileReference section */
 		EF1A0BE627B3E06C00D99B27 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		EF21674E27B3F97B004241EB /* PopoverViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverViews.swift; sourceTree = "<group>"; };
+		EF21674E27B3F97B004241EB /* NewSetPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSetPopover.swift; sourceTree = "<group>"; };
 		EF21675227B52739004241EB /* ScoresPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoresPanel.swift; sourceTree = "<group>"; };
 		EF21675427B56111004241EB /* TeamsLabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsLabelsView.swift; sourceTree = "<group>"; };
 		EF33B4852750E2AA00B1287E /* GeometryGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryGetter.swift; sourceTree = "<group>"; };
 		EF33B4872750EBEB00B1287E /* BigButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtons.swift; sourceTree = "<group>"; };
+		EF4246DE27F4787A00A872D3 /* ContentView-ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView-ViewModel.swift"; sourceTree = "<group>"; };
+		EF4246E027F4845500A872D3 /* AppProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProperties.swift; sourceTree = "<group>"; };
+		EF4246E227F490A700A872D3 /* UndoScorePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoScorePopover.swift; sourceTree = "<group>"; };
+		EF4246E427F490DA00A872D3 /* TrashButtonPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashButtonPopover.swift; sourceTree = "<group>"; };
+		EF54E39827FDC1D400411EDD /* MorePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePopover.swift; sourceTree = "<group>"; };
+		EFAEA0BE27FDCF8C005A95EC /* LabelStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelStyles.swift; sourceTree = "<group>"; };
 		EFC9E4762749773300199C3B /* ScoreCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC9E4792749773300199C3B /* ScoreCounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCounterApp.swift; sourceTree = "<group>"; };
 		EFC9E47B2749773300199C3B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +72,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EF4246E627F4910200A872D3 /* PopoverViews */ = {
+			isa = PBXGroup;
+			children = (
+				EF21674E27B3F97B004241EB /* NewSetPopover.swift */,
+				EF4246E227F490A700A872D3 /* UndoScorePopover.swift */,
+				EF4246E427F490DA00A872D3 /* TrashButtonPopover.swift */,
+				EF54E39827FDC1D400411EDD /* MorePopover.swift */,
+			);
+			path = PopoverViews;
+			sourceTree = "<group>";
+		};
 		EFC9E46D2749773300199C3B = {
 			isa = PBXGroup;
 			children = (
@@ -81,8 +104,8 @@
 			children = (
 				EFC9E4792749773300199C3B /* ScoreCounterApp.swift */,
 				EFC9E488274977AB00199C3B /* Model */,
-				EFC9E48A274977BF00199C3B /* Views */,
-				EFC9E49C274AF0DB00199C3B /* Extensions */,
+				EFC9E48A274977BF00199C3B /* Views-ViewModels */,
+				EFC9E49C274AF0DB00199C3B /* Extensions and Styles */,
 				EFC9E47D2749773600199C3B /* Assets.xcassets */,
 				EFC9E47F2749773600199C3B /* Preview Content */,
 			);
@@ -100,6 +123,7 @@
 		EFC9E488274977AB00199C3B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EF4246E027F4845500A872D3 /* AppProperties.swift */,
 				EFC9E48B2749786100199C3B /* ScoreStorage.xcdatamodeld */,
 				EFC9E494274AC88400199C3B /* PersistenceController.swift */,
 				EFD66B6527B3C284009F96FC /* CoreDataOperations.swift */,
@@ -107,12 +131,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		EFC9E48A274977BF00199C3B /* Views */ = {
+		EFC9E48A274977BF00199C3B /* Views-ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				EFC9E47B2749773300199C3B /* ContentView.swift */,
+				EF4246DE27F4787A00A872D3 /* ContentView-ViewModel.swift */,
 				EFC9E48E27497A1800199C3B /* Toolbar.swift */,
-				EF21674E27B3F97B004241EB /* PopoverViews.swift */,
+				EF4246E627F4910200A872D3 /* PopoverViews */,
 				EF21675227B52739004241EB /* ScoresPanel.swift */,
 				EF21675427B56111004241EB /* TeamsLabelsView.swift */,
 				EFC9E4922749887300199C3B /* CurrentScore.swift */,
@@ -121,16 +146,17 @@
 				EFC9E49A274AEAEE00199C3B /* ScoreHistoryRow.swift */,
 				EF33B4852750E2AA00B1287E /* GeometryGetter.swift */,
 			);
-			path = Views;
+			path = "Views-ViewModels";
 			sourceTree = "<group>";
 		};
-		EFC9E49C274AF0DB00199C3B /* Extensions */ = {
+		EFC9E49C274AF0DB00199C3B /* Extensions and Styles */ = {
 			isa = PBXGroup;
 			children = (
 				EFC9E49D274AF10300199C3B /* Date.swift */,
 				EF1A0BE627B3E06C00D99B27 /* String.swift */,
+				EFAEA0BE27FDCF8C005A95EC /* LabelStyles.swift */,
 			);
-			path = Extensions;
+			path = "Extensions and Styles";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,17 +229,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF21674F27B3F97B004241EB /* PopoverViews.swift in Sources */,
+				EF4246E327F490A700A872D3 /* UndoScorePopover.swift in Sources */,
+				EF4246E127F4845500A872D3 /* AppProperties.swift in Sources */,
+				EF21674F27B3F97B004241EB /* NewSetPopover.swift in Sources */,
 				EFC9E4932749887300199C3B /* CurrentScore.swift in Sources */,
+				EF4246E527F490DA00A872D3 /* TrashButtonPopover.swift in Sources */,
 				EF1A0BE727B3E06C00D99B27 /* String.swift in Sources */,
 				EFC9E49B274AEAEE00199C3B /* ScoreHistoryRow.swift in Sources */,
 				EF33B4862750E2AA00B1287E /* GeometryGetter.swift in Sources */,
 				EF33B4882750EBEB00B1287E /* BigButtons.swift in Sources */,
+				EF54E39927FDC1D400411EDD /* MorePopover.swift in Sources */,
 				EFC9E48D2749786100199C3B /* ScoreStorage.xcdatamodeld in Sources */,
 				EFC9E4912749880F00199C3B /* HistoryOfSets.swift in Sources */,
+				EF4246DF27F4787A00A872D3 /* ContentView-ViewModel.swift in Sources */,
 				EF21675527B56111004241EB /* TeamsLabelsView.swift in Sources */,
 				EFC9E47C2749773300199C3B /* ContentView.swift in Sources */,
 				EFC9E495274AC88400199C3B /* PersistenceController.swift in Sources */,
+				EFAEA0BF27FDCF8C005A95EC /* LabelStyles.swift in Sources */,
 				EF21675327B52739004241EB /* ScoresPanel.swift in Sources */,
 				EFC9E49E274AF10300199C3B /* Date.swift in Sources */,
 				EFC9E47A2749773300199C3B /* ScoreCounterApp.swift in Sources */,
@@ -361,7 +393,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -390,7 +422,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.rh.res.ScoreCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

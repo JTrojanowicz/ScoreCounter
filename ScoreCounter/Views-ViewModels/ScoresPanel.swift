@@ -24,13 +24,11 @@ struct ScoresPanel: View {
             
             Spacer()
             TeamsLabelsView()
-//                .background(Color.yellow)
             Spacer()
             CurrentScore()
             Spacer()
             BigButtons()
                 .padding(.bottom)
-//                .background(Color.yellow)
             Spacer()
         }
     }

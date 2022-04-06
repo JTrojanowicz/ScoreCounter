@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, TitleView: View, TrashButtonView: View>: ToolbarContent {
+struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, TitleView: View, TrashButtonView: View, MoreButtonView: View>: ToolbarContent {
     @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var appProperties: AppProperties
     
@@ -17,6 +17,7 @@ struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, Ti
     @ViewBuilder var newSetView: NewSetView
     @ViewBuilder var titleView: TitleView
     @ViewBuilder var trashButtonView: TrashButtonView
+    @ViewBuilder var moreButtonView: MoreButtonView
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -34,19 +35,9 @@ struct Toolbar<PreviousSetView: View, UndoButtonView: View, NewSetView: View, Ti
         ToolbarItem(placement: .navigationBarTrailing) {
             HStack {
                 trashButtonView
-                Button(action: toggleSpeaker) {
-                    if appProperties.isSpeakerON {
-                        Image(systemName: "speaker.wave.3.fill")
-                    } else {
-                        Image(systemName: "speaker.slash.fill")
-                    }
-                }
+                moreButtonView
             }
         }
-    }
-    
-    private func toggleSpeaker() {
-        appProperties.isSpeakerON.toggle()
     }
 }
 
