@@ -12,3 +12,4 @@ Features and functionality:
 6) Swapping the courts
 7) Audio ON/OFF
 8) iPad/iPhone auto-adjustable
+9) written in SwiftUI
